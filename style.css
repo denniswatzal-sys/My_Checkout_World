@@ -216,6 +216,7 @@
       text-align: center;
       border: 1px solid #000;
       margin-bottom: 12px;
+      overflow: hidden;
     }
     
     .score-card.twodarts {
@@ -249,7 +250,12 @@
       line-height: 1;
       cursor: pointer;
       user-select: none;
-      transition: opacity 0.2s;
+      transition: opacity 0.2s, margin-top 0.2s;
+      margin-top: 0;
+    }
+    
+    .score-card.has-rest .score-value {
+      margin-top: -4px;
     }
     
     .score-value:hover {
@@ -321,13 +327,14 @@
       gap: 6px;
       justify-content: center;
       align-items: center;
-      margin-bottom: 12px;
+      margin: 0 auto 12px auto;
       min-height: 40px;
       padding: 8px 12px;
       border-radius: 8px;
       background: transparent;
       transition: all 0.3s ease;
       flex-wrap: wrap;
+      width: fit-content;
     }
     
     /* Active state - shown after first input (like challenge-card) */
@@ -375,7 +382,7 @@
       font-size: 13px;
       font-weight: 600;
       color: white;
-      margin-top: 4px;
+      margin-top: 2px;
     }
     
     .user-input-chip {
