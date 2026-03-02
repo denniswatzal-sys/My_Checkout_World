@@ -321,13 +321,14 @@
       gap: 6px;
       justify-content: center;
       align-items: center;
-      margin-bottom: 12px;
+      margin: 0 auto 12px auto;
       min-height: 40px;
       padding: 8px 12px;
       border-radius: 8px;
       background: transparent;
       transition: all 0.3s ease;
       flex-wrap: wrap;
+      width: fit-content;
     }
     
     /* Active state - shown after first input (like challenge-card) */
