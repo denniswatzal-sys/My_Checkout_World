@@ -321,14 +321,13 @@
       gap: 6px;
       justify-content: center;
       align-items: center;
-      margin: 0 auto 12px auto;
+      margin-bottom: 12px;
       min-height: 40px;
       padding: 8px 12px;
       border-radius: 8px;
       background: transparent;
       transition: all 0.3s ease;
       flex-wrap: wrap;
-      width: fit-content;
     }
     
     /* Active state - shown after first input (like challenge-card) */
@@ -372,16 +371,11 @@
     }
     
     .remaining-score-outer {
-      width: 100%;
-      margin: -6px auto 12px auto;
       text-align: center;
-      font-size: 14px;
-      font-weight: 700;
-      color: #1e40af;
-      padding: 8px 12px;
-      background: #dbeafe;
-      border-radius: 6px;
-      border: 1px solid #3b82f6;
+      font-size: 13px;
+      font-weight: 600;
+      color: white;
+      margin-top: 4px;
     }
     
     .user-input-chip {

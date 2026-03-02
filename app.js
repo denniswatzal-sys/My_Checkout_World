@@ -2633,10 +2633,15 @@ if (document.readyState === 'loading') {
       userInputsEl.innerHTML = '';
       userInputsEl.classList.remove('correct', 'wrong', 'active');
       
-      // CRITICAL: Remove remaining score box (it's a sibling, not a child of userInputs)
+      // CRITICAL: Remove remaining score box (now inside scoreCard)
       const remainingScoreOuter = userInputsEl.parentElement.querySelector('.remaining-score-outer');
       if (remainingScoreOuter) {
         remainingScoreOuter.remove();
+      }
+      const scoreCardEl = document.getElementById('scoreCard');
+      const remainingInCard = scoreCardEl ? scoreCardEl.querySelector('.remaining-score-outer') : null;
+      if (remainingInCard) {
+        remainingInCard.remove();
       }
       
       // Remove glow from outer ring when generating new score
@@ -3460,6 +3465,11 @@ if (document.readyState === 'loading') {
       if (oldRemainingOuter) {
         oldRemainingOuter.remove();
       }
+      const scoreCard = document.getElementById('scoreCard');
+      const oldRemainingInCard = scoreCard ? scoreCard.querySelector('.remaining-score-outer') : null;
+      if (oldRemainingInCard) {
+        oldRemainingInCard.remove();
+      }
       
       // Behalte Lösung
       const solution = container.querySelector('.solution-text');
@@ -3512,10 +3522,13 @@ if (document.readyState === 'loading') {
           if (remainingScore >= 2) {
             const remainingDiv = document.createElement('div');
             remainingDiv.className = 'remaining-score-outer';
-            remainingDiv.textContent = `Restwert: ${remainingScore}`;
+            remainingDiv.textContent = `Rest: ${remainingScore}`;
             
-            // Füge NACH dem userInputs Container ein (als Sibling, nicht Child)
-            container.parentElement.insertBefore(remainingDiv, container.nextSibling);
+            // Füge IN die scoreCard ein (unter der Zahl)
+            const scoreCard = document.getElementById('scoreCard');
+            if (scoreCard) {
+              scoreCard.appendChild(remainingDiv);
+            }
           }
         }
       }
