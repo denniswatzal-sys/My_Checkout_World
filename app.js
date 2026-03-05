@@ -2633,16 +2633,10 @@ if (document.readyState === 'loading') {
       userInputsEl.innerHTML = '';
       userInputsEl.classList.remove('correct', 'wrong', 'active');
       
-      // CRITICAL: Remove remaining score box
+      // CRITICAL: Remove remaining score box (it's a sibling, not a child of userInputs)
       const remainingScoreOuter = userInputsEl.parentElement.querySelector('.remaining-score-outer');
       if (remainingScoreOuter) {
         remainingScoreOuter.remove();
-      }
-      const scoreCardEl2 = document.getElementById('scoreCard');
-      if (scoreCardEl2) {
-        const rem2 = scoreCardEl2.querySelector('.remaining-score-outer');
-        if (rem2) rem2.remove();
-        scoreCardEl2.classList.remove('has-rest');
       }
       
       // Remove glow from outer ring when generating new score
@@ -3466,12 +3460,6 @@ if (document.readyState === 'loading') {
       if (oldRemainingOuter) {
         oldRemainingOuter.remove();
       }
-      const scoreCardCleanup = document.getElementById('scoreCard');
-      if (scoreCardCleanup) {
-        const oldInCard = scoreCardCleanup.querySelector('.remaining-score-outer');
-        if (oldInCard) oldInCard.remove();
-        scoreCardCleanup.classList.remove('has-rest');
-      }
       
       // Behalte Lösung
       const solution = container.querySelector('.solution-text');
@@ -3479,18 +3467,6 @@ if (document.readyState === 'loading') {
       if (userInputs.length === 0) {
         // Entferne nur die Chips
         container.querySelectorAll('.user-input-chip').forEach(chip => chip.remove());
-        
-        // Zeige Restwert (= aktueller Score) sofort beim Laden, wenn aktiviert
-        if (showRemainingScore && !window.challengeMode && typeof currentScore !== 'undefined') {
-          const remainingDiv = document.createElement('div');
-          remainingDiv.className = 'remaining-score-outer';
-          remainingDiv.textContent = `Rest: ${currentScore}`;
-          const scoreCard = document.getElementById('scoreCard');
-          if (scoreCard) {
-            scoreCard.appendChild(remainingDiv);
-            scoreCard.classList.add('has-rest');
-          }
-        }
       } else {
         // Entferne nur die Chips
         container.querySelectorAll('.user-input-chip').forEach(chip => chip.remove());
@@ -3533,17 +3509,13 @@ if (document.readyState === 'loading') {
           }
           
           // Zeige Restwert wenn sinnvoll (nicht überkauft, nicht auf 1)
-          if (remainingScore >= 0) {
+          if (remainingScore >= 2) {
             const remainingDiv = document.createElement('div');
             remainingDiv.className = 'remaining-score-outer';
-            remainingDiv.textContent = `Rest: ${remainingScore}`;
+            remainingDiv.textContent = `Restwert: ${remainingScore}`;
             
-            // Füge IN die scoreCard ein (unter der Zahl)
-            const scoreCard = document.getElementById('scoreCard');
-            if (scoreCard) {
-              scoreCard.appendChild(remainingDiv);
-              scoreCard.classList.add('has-rest');
-            }
+            // Füge NACH dem userInputs Container ein (als Sibling, nicht Child)
+            container.parentElement.insertBefore(remainingDiv, container.nextSibling);
           }
         }
       }
