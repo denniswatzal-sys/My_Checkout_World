@@ -330,12 +330,6 @@
       flex-wrap: wrap;
     }
     
-    /* Active state - shown after first input (like challenge-card) */
-    .user-inputs.active {
-      background: #fef3c7;
-      border: 2px solid #f59e0b;
-    }
-    
     .user-inputs.correct {
       background: #d1fae5;
       border: 2px solid #059669;
