@@ -2738,6 +2738,12 @@ if (document.readyState === 'loading') {
         // Reset feedback
         feedback = null;
         
+        // Cancel auto-advance timer if running
+        if (window.autoNextTimer) {
+          clearTimeout(window.autoNextTimer);
+          window.autoNextTimer = null;
+        }
+        
         // Generate new score
         if (window.learnModeActive) {
           generateLearnScore();
