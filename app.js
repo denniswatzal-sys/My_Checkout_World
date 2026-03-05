@@ -3471,11 +3471,6 @@ if (document.readyState === 'loading') {
         // Entferne nur die Chips
         container.querySelectorAll('.user-input-chip').forEach(chip => chip.remove());
         
-        // Bei erster Eingabe: Zeige Container mit active-Stil (wie challenge-card)
-        if (!container.classList.contains('correct') && !container.classList.contains('wrong')) {
-          container.classList.add('active');
-        }
-        
         // Füge neue Chips hinzu (vor solution/remaining wenn vorhanden)
         const chipsHTML = userInputs.map(input => 
           `<div class="user-input-chip">${input}</div>`
