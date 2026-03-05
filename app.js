@@ -3564,11 +3564,13 @@ if (document.readyState === 'loading') {
         
         // Automatisch zur nächsten Zahl
         if (window.challengeMode) {
-          setTimeout(() => {
+          window.autoNextTimer = setTimeout(() => {
+            window.autoNextTimer = null;
             generateScore(currentRangeMin, currentRangeMax);
           }, 500);
         } else {
-          setTimeout(() => {
+          window.autoNextTimer = setTimeout(() => {
+            window.autoNextTimer = null;
             generateScore(currentRangeMin, currentRangeMax);
           }, 1200);
         }
@@ -3589,6 +3591,10 @@ if (document.readyState === 'loading') {
     }
     
     function handleNext() {
+      if (window.autoNextTimer) {
+        clearTimeout(window.autoNextTimer);
+        window.autoNextTimer = null;
+      }
       if (window.learnModeActive) {
         generateLearnScore();
       } else {
