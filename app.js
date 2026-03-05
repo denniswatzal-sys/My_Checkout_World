@@ -1179,6 +1179,13 @@ if (document.readyState === 'loading') {
       currentTutorialStep = 0;
       tutorialActive = true;
       
+      // Stop pulse animation and mark as pressed
+      const tutorialBtn = document.getElementById('btn-tutorial');
+      if (tutorialBtn) {
+        tutorialBtn.classList.remove('pulse');
+        localStorage.setItem('dartTrainerMysteryBoxPressed', 'true');
+      }
+      
       // Ensure we're on the start screen
       const startScreen = document.getElementById('startScreen');
       const mainApp = document.getElementById('mainApp');
@@ -1504,6 +1511,15 @@ if (document.readyState === 'loading') {
       document.getElementById('tutorialNext').addEventListener('click', nextTutorialStep);
       document.getElementById('tutorialBack').addEventListener('click', prevTutorialStep);
       document.getElementById('tutorialOverlay').addEventListener('click', endTutorial);
+      
+      // Pulse animation for Mystery-Box button if never pressed before
+      const mysteryPressed = localStorage.getItem('dartTrainerMysteryBoxPressed');
+      if (!mysteryPressed) {
+        const tutorialBtn = document.getElementById('btn-tutorial');
+        if (tutorialBtn) {
+          tutorialBtn.classList.add('pulse');
+        }
+      }
       
       // Prevent tooltip clicks from closing tutorial
       document.getElementById('tutorialTooltip').addEventListener('click', function(e) {
