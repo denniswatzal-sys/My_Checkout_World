@@ -1179,7 +1179,7 @@ if (document.readyState === 'loading') {
       {
         element: '#menuBtn',
         title: '⚙️ Einstellungen',
-        content: 'Im Einstellungsmenü findest du<br>zusätzliche Optionen wie <em>Freies Spiel<br>(Fehlwürfe erlaubt), Restwert anzeigen,<br>Zahlenring ausblenden, Vibration<br>ausschalten</em> und <em>Hintergrund anpassen</em>.<br><br><strong>Taste gedrückt halten</strong> – Vollbildmodus<br><strong>Taste antippen</strong> – Menü öffnen',
+        content: 'Im Einstellungsmenü findest du<br>zusätzliche Optionen wie <em>Freies Spiel<br>(Fehlwürfe erlaubt), Restwert ausblenden,<br>Zahlenring ausblenden, Vibration<br>ausschalten</em> und <em>Hintergrund anpassen</em>.<br><br><strong>Taste gedrückt halten</strong> – Vollbildmodus<br><strong>Taste antippen</strong> – Menü öffnen',
         position: 'top-right',
         screen: 'training'
       },
