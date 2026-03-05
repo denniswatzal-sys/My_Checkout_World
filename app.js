@@ -2720,6 +2720,8 @@ if (document.readyState === 'loading') {
       vibrateMedium();
       
       // Smooth dim rangeCard content on first dartboard click (3-second transition via CSS)
+      // DEAKTIVIERT - zum Reaktivieren den Kommentar entfernen
+      /*
       const rangeCard = document.getElementById('rangeCard');
       if (rangeCard && !window.rangeCardDimming) {
         window.rangeCardDimming = true;  // Prevent further clicks from resetting
@@ -2732,6 +2734,7 @@ if (document.readyState === 'loading') {
         rangeCard.style.borderColor = 'rgba(255, 255, 255, 0.2)';  // Border 20% sichtbar
         console.log('[DEBUG] RangeCard content dimming to 0% (border 20%) - 3-second smooth transition');
       }
+      */
       
       // Wenn Feedback für falsche Antwort angezeigt wird, nächste Aufgabe bei Klick auf Dartscheibe
       // (Richtige Antworten gehen automatisch weiter)
