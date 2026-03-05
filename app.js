@@ -1006,7 +1006,7 @@ if (document.readyState === 'loading') {
     const tutorialSteps = [
       {
         element: '#btn-tutorial',
-        title: '🫵 Erwischt...',
+        title: '☝️ Erwischt...',
         content: 'Schon witzig: Hätte hier <strong>Bedienungsanleitung</strong> gestanden, hättest du sicher nicht getippt, oder? 😅<br><br>Na gut – wenn du schon da bist, erkläre ich dir kurz die wichtigsten Funktionen und warum es mich überhaupt gibt.',
         position: 'top',
         screen: 'start'
