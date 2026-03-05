@@ -235,8 +235,34 @@ let realisticMode = true;
 // Global show remaining score state (loaded from localStorage)
 let showRemainingScore = true;
 
-// Challenge mode video index for sequential playback
-let challengeVideoIndex = 0;
+// Challenge mode video shuffle playlist
+const challengeVideoList = ['Flugzeug.mp4', 'THE-MENACE.mp4', 'Waschmachine.mp4', 'Angler.mp4', 'Schlafen.mp4'];
+let challengeVideoPlaylist = [];
+let challengeVideoPlaylistIndex = 0;
+
+function shuffleArray(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function getNextChallengeVideo() {
+  if (challengeVideoPlaylistIndex >= challengeVideoPlaylist.length) {
+    // All videos played - reshuffle, but avoid starting with the last video of previous round
+    const lastVideo = challengeVideoPlaylist[challengeVideoPlaylist.length - 1];
+    let newPlaylist = shuffleArray(challengeVideoList);
+    // If first video of new round is same as last of previous, swap it with second
+    if (newPlaylist[0] === lastVideo && newPlaylist.length > 1) {
+      [newPlaylist[0], newPlaylist[1]] = [newPlaylist[1], newPlaylist[0]];
+    }
+    challengeVideoPlaylist = newPlaylist;
+    challengeVideoPlaylistIndex = 0;
+  }
+  return challengeVideoPlaylist[challengeVideoPlaylistIndex++];
+}
 
 // Load vibration setting from localStorage
 try {
@@ -3782,12 +3808,8 @@ if (document.readyState === 'loading') {
         // Hide range card during challenge
         document.getElementById('rangeCard').style.display = 'none';
         
-        // Select MP4 for challenge mode in fixed sequence
-        const videos = ['Flugzeug.mp4', 'THE-MENACE.mp4', 'Waschmachine.mp4', 'Angler.mp4', 'Schlafen.mp4'];
-        const currentVideo = videos[challengeVideoIndex];
-        
-        // Move to next video for next challenge (loop back to start)
-        challengeVideoIndex = (challengeVideoIndex + 1) % videos.length;
+        // Select MP4 for challenge mode - shuffle playlist (no repeats until all played)
+        const currentVideo = getNextChallengeVideo();
         
         const videoElement = document.querySelector('.challenge-gif video source');
         if (videoElement) {
