@@ -2633,10 +2633,10 @@ if (document.readyState === 'loading') {
       userInputsEl.innerHTML = '';
       userInputsEl.classList.remove('correct', 'wrong', 'active');
       
-      // CRITICAL: Remove remaining score box (it's a sibling, not a child of userInputs)
-      const remainingScoreOuter = userInputsEl.parentElement.querySelector('.remaining-score-outer');
-      if (remainingScoreOuter) {
-        remainingScoreOuter.remove();
+      // CRITICAL: Remove remaining score display
+      const scoreRemainingEl = document.getElementById('scoreRemaining');
+      if (scoreRemainingEl) {
+        scoreRemainingEl.textContent = '';
       }
       
       // Remove glow from outer ring when generating new score
@@ -3456,9 +3456,9 @@ if (document.readyState === 'loading') {
       if (oldRemaining) {
         oldRemaining.remove();
       }
-      const oldRemainingOuter = container.parentElement.querySelector('.remaining-score-outer');
-      if (oldRemainingOuter) {
-        oldRemainingOuter.remove();
+      const scoreRemainingEl = document.getElementById('scoreRemaining');
+      if (scoreRemainingEl) {
+        scoreRemainingEl.textContent = '';
       }
       
       // Behalte Lösung
@@ -3505,12 +3505,10 @@ if (document.readyState === 'loading') {
           
           // Zeige Restwert wenn sinnvoll (nicht überkauft, nicht auf 1)
           if (remainingScore >= 2) {
-            const remainingDiv = document.createElement('div');
-            remainingDiv.className = 'remaining-score-outer';
-            remainingDiv.textContent = `Restwert: ${remainingScore}`;
-            
-            // Füge NACH dem userInputs Container ein (als Sibling, nicht Child)
-            container.parentElement.insertBefore(remainingDiv, container.nextSibling);
+            const scoreRemainingEl = document.getElementById('scoreRemaining');
+            if (scoreRemainingEl) {
+              scoreRemainingEl.textContent = `Rest: ${remainingScore}`;
+            }
           }
         }
       }
