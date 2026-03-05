@@ -262,10 +262,10 @@
     
     .score-remaining {
       font-size: 14px;
-      font-weight: 600;
+      font-weight: 800;
       color: rgba(255, 255, 255, 0.85);
       margin-top: 4px;
-      min-height: 0;
+      min-height: 20px;
     }
     
     .stell-text {
