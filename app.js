@@ -3572,7 +3572,7 @@ if (document.readyState === 'loading') {
         } else {
           setTimeout(() => {
             generateScore(currentRangeMin, currentRangeMax);
-          }, 1500);
+          }, 1200);
         }
       } else {
         // Bei falsch: Rot färben + Lösung anzeigen
