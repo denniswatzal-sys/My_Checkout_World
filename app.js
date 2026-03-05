@@ -5235,6 +5235,10 @@ if (document.readyState === 'loading') {
     if (scoreValue) {
       scoreValue.addEventListener('click', function() {
         console.log('Score value clicked - opening manual entry');
+        if (window.autoNextTimer) {
+          clearTimeout(window.autoNextTimer);
+          window.autoNextTimer = null;
+        }
         setManualScore();
       });
       console.log('Score value click listener attached');
@@ -5247,6 +5251,11 @@ if (document.readyState === 'loading') {
         // Only proceed if feedback is shown
         if (feedback) {
           console.log('User inputs box clicked - generating next score');
+          // Cancel auto-advance timer if running
+          if (window.autoNextTimer) {
+            clearTimeout(window.autoNextTimer);
+            window.autoNextTimer = null;
+          }
           // Reset manual score flag - generate random score now
           manualScoreActive = false;
           
