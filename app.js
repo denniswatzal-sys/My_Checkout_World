@@ -3564,14 +3564,16 @@ if (document.readyState === 'loading') {
         userInputs.classList.remove('active');  // Entferne active
         userInputs.classList.add('correct');
         
-        // Automatisch zur nächsten Zahl NUR im Challenge-Modus
+        // Automatisch zur nächsten Zahl
         if (window.challengeMode) {
-          const delay = 500;
           setTimeout(() => {
             generateScore(currentRangeMin, currentRangeMax);
-          }, delay);
+          }, 500);
+        } else {
+          setTimeout(() => {
+            generateScore(currentRangeMin, currentRangeMax);
+          }, 1500);
         }
-        // Im normalen Trainingsmodus KEIN Auto-Continue - User muss manuell klicken
       } else {
         // Bei falsch: Rot färben + Lösung anzeigen
         userInputs.classList.remove('active');  // Entferne active
