@@ -1510,7 +1510,9 @@ if (document.readyState === 'loading') {
       document.getElementById('tutorialClose').addEventListener('click', endTutorial);
       document.getElementById('tutorialNext').addEventListener('click', nextTutorialStep);
       document.getElementById('tutorialBack').addEventListener('click', prevTutorialStep);
-      document.getElementById('tutorialOverlay').addEventListener('click', endTutorial);
+      document.getElementById('tutorialOverlay').addEventListener('click', function(e) {
+        // Do nothing - overlay click should not close tutorial
+      });
       
       // Pulse animation for Mystery-Box button if never pressed before
       const mysteryPressed = localStorage.getItem('dartTrainerMysteryBoxPressed');
