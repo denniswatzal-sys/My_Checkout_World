@@ -2252,32 +2252,9 @@ if (document.readyState === 'loading') {
         
         console.log('Manual score validation passed - Mode:', currentMode, 'Checkout database:', currentCheckouts === twoDartCheckouts ? '2DF' : '3DF');
         
-        // Set the score
+        // Set the score and run the same cleanup as generateScore
         currentScore = score;
-        currentCheckout = checkout;
-        userInputs = [];
-        highlightedFields = [];
-        feedback = null;
-        
-        // Update display
-        scoreValueEl.textContent = currentScore;
-        const userInputsBox = document.getElementById('userInputs');
-        userInputsBox.innerHTML = '';
-        userInputsBox.classList.remove('correct', 'wrong', 'active'); // Remove feedback classes
-        document.getElementById('feedbackCard').classList.add('hidden');
-        
-        // Update score card styling based on ACTUAL checkout used
-        const isStell = stellZahlen.includes(currentScore);
-        const scoreCard = document.getElementById('scoreCard');
-        scoreCard.classList.remove('stell', 'twodarts');
-        if (isStell) {
-          scoreCard.classList.add('stell');
-        } else if (currentCheckouts === twoDartCheckouts) {
-          scoreCard.classList.add('twodarts');
-        }
-        
-        updateScoreTitle();
-        createDartboard();
+        applyScoreDisplay();
         
         // Always switch to 2-170 range when manually entering a score
         currentRangeMin = 2;
@@ -2316,7 +2293,6 @@ if (document.readyState === 'loading') {
         }
         
         console.log('Manual score set successfully:', score, 'Mode:', currentMode, 'Checkout:', checkout);
-        window._manualScoreAppliedAt = Date.now();
       };
       
       // Prevent non-numeric input in real-time
@@ -2382,6 +2358,54 @@ if (document.readyState === 'loading') {
       }, 100);
     }
     
+    // Shared display-update used by generateScore AND applyScore (manual entry)
+    function applyScoreDisplay() {
+      currentCheckout = currentCheckouts[currentScore] || [];
+      userInputs = [];
+      highlightedFields = [];
+      feedback = null;
+      
+      // Cancel any running auto-advance timer
+      if (window.autoNextTimer) {
+        clearTimeout(window.autoNextTimer);
+        window.autoNextTimer = null;
+      }
+      
+      document.getElementById('scoreValue').textContent = currentScore;
+      
+      const userInputsEl = document.getElementById('userInputs');
+      userInputsEl.innerHTML = '';
+      userInputsEl.classList.remove('correct', 'wrong', 'active');
+      
+      // Remove remaining score display
+      const scoreRemainingEl = document.getElementById('scoreRemaining');
+      if (scoreRemainingEl) scoreRemainingEl.textContent = '';
+      
+      // Remove glow from outer ring
+      const outerRing = document.getElementById('dartboard-outer-ring');
+      if (outerRing) outerRing.classList.remove('flash-correct', 'flash-wrong');
+      
+      const isStell = stellZahlen.includes(currentScore);
+      const scoreCard = document.getElementById('scoreCard');
+      scoreCard.classList.remove('stell', 'twodarts', 'error', 'warning');
+      
+      // Reset realistic mode state
+      isInErrorState = false;
+      currentRemainingScore = null;
+      dartsUsedInRound = 0;
+      errorStateCheckout = [];
+      dartsInErrorState = 0;
+      
+      if (isStell) {
+        scoreCard.classList.add('stell');
+      } else if (currentMode === '2darts' || (currentMode === 'mixed' && currentCheckouts === twoDartCheckouts)) {
+        scoreCard.classList.add('twodarts');
+      }
+      
+      updateScoreTitle();
+      createDartboard();
+    }
+
     function generateScore(min, max) {
       // For mixed mode, get ALL available scores (both 2DF and 3DF)
       // Then decide 2DF vs 3DF based on the selected score
@@ -2788,60 +2812,10 @@ if (document.readyState === 'loading') {
         }
       }
       
-      currentCheckout = currentCheckouts[currentScore] || [];
-      userInputs = [];
-      highlightedFields = [];
-      feedback = null;
-      
-      document.getElementById('scoreValue').textContent = currentScore;
-      
-      // Reset user-inputs
-      const userInputsEl = document.getElementById('userInputs');
-      userInputsEl.innerHTML = '';
-      userInputsEl.classList.remove('correct', 'wrong', 'active');
-      
-      // CRITICAL: Remove remaining score display
-      const scoreRemainingEl = document.getElementById('scoreRemaining');
-      if (scoreRemainingEl) {
-        scoreRemainingEl.textContent = '';
-      }
-      
-      // Remove glow from outer ring when generating new score
-      const outerRing = document.getElementById('dartboard-outer-ring');
-      if (outerRing) {
-        outerRing.classList.remove('flash-correct', 'flash-wrong');
-      }
-      
-      const isStell = stellZahlen.includes(currentScore);
-      const scoreCard = document.getElementById('scoreCard');
-      
-      // Remove all classes including error and warning
-      scoreCard.classList.remove('stell', 'twodarts', 'error', 'warning');
-      
-      // Reset realistic mode state
-      if (realisticMode) {
-        isInErrorState = false;
-        currentRemainingScore = null;
-        dartsUsedInRound = 0;
-        errorStateCheckout = [];
-        dartsInErrorState = 0;
-      }
-      
-      // Add appropriate class
-      if (isStell) {
-        scoreCard.classList.add('stell');
-      } else if (currentMode === '2darts' || (currentMode === 'mixed' && currentCheckouts === twoDartCheckouts)) {
-        scoreCard.classList.add('twodarts');
-      }
-      
-      updateScoreTitle();
-      createDartboard();
+      applyScoreDisplay();
     }
     
     function handleDartClick(dartValue) {
-      // Ignore tap-through clicks right after manual score entry
-      if (window._manualScoreAppliedAt && Date.now() - window._manualScoreAppliedAt < 300) return;
-      
       // Haptic feedback for dartboard clicks
       vibrateMedium();
       
