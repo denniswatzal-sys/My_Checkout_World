@@ -305,6 +305,17 @@ try {
   console.error('Could not load box dimming setting:', e);
 }
 
+// Load numbers visible setting from localStorage
+try {
+  const savedNumbersVisible = localStorage.getItem('dartTrainerNumbersVisible');
+  if (savedNumbersVisible !== null) {
+    // numbersVisible is declared inside the app block, so we use a temp flag
+    window._savedNumbersVisible = savedNumbersVisible === 'true';
+  }
+} catch (e) {
+  console.error('Could not load numbers visible setting:', e);
+}
+
 function vibrate(duration) {
   if (vibrationEnabled && 'vibrate' in navigator) {
     navigator.vibrate(duration);
@@ -568,7 +579,8 @@ if (document.readyState === 'loading') {
     }
     
     // Track black ring visibility
-    let numbersVisible = true;
+    let numbersVisible = (window._savedNumbersVisible !== undefined) ? window._savedNumbersVisible : true;
+    delete window._savedNumbersVisible;
     
     // Make challengeMode and challengeTimer global (no let)
     window.challengeMode = false;
@@ -4645,6 +4657,7 @@ if (document.readyState === 'loading') {
     
     function toggleBlackRing() {
       numbersVisible = !numbersVisible;
+      localStorage.setItem('dartTrainerNumbersVisible', numbersVisible.toString());
       createDartboard();
       updateMenuItems();
     }
