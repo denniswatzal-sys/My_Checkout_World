@@ -2153,6 +2153,12 @@ if (document.readyState === 'loading') {
         return;
       }
       
+      // Cancel any running auto-advance timer
+      if (window.autoNextTimer) {
+        clearTimeout(window.autoNextTimer);
+        window.autoNextTimer = null;
+      }
+      
       console.log('Opening inline edit for score - Current mode:', currentMode);
       
       const scoreValueEl = document.getElementById('scoreValue');
