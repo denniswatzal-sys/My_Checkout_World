@@ -2258,6 +2258,19 @@ if (document.readyState === 'loading') {
         userInputs = [];
         highlightedFields = [];
         feedback = null;
+        isInErrorState = false;
+        currentRemainingScore = null;
+        dartsUsedInRound = 0;
+        errorStateCheckout = [];
+        dartsInErrorState = 0;
+        
+        // Clear remaining score display
+        const scoreRemainingEl = document.getElementById('scoreRemaining');
+        if (scoreRemainingEl) scoreRemainingEl.textContent = '';
+        
+        // Clear dartboard flash
+        const outerRing = document.getElementById('dartboard-outer-ring');
+        if (outerRing) outerRing.classList.remove('flash-correct', 'flash-wrong');
         
         // Update display
         scoreValueEl.textContent = currentScore;
