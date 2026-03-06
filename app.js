@@ -2153,12 +2153,6 @@ if (document.readyState === 'loading') {
         return;
       }
       
-      // Cancel any running auto-advance timer
-      if (window.autoNextTimer) {
-        clearTimeout(window.autoNextTimer);
-        window.autoNextTimer = null;
-      }
-      
       console.log('Opening inline edit for score - Current mode:', currentMode);
       
       const scoreValueEl = document.getElementById('scoreValue');
@@ -2264,19 +2258,6 @@ if (document.readyState === 'loading') {
         userInputs = [];
         highlightedFields = [];
         feedback = null;
-        isInErrorState = false;
-        currentRemainingScore = null;
-        dartsUsedInRound = 0;
-        errorStateCheckout = [];
-        dartsInErrorState = 0;
-        
-        // Clear remaining score display
-        const scoreRemainingEl = document.getElementById('scoreRemaining');
-        if (scoreRemainingEl) scoreRemainingEl.textContent = '';
-        
-        // Clear dartboard flash
-        const outerRing = document.getElementById('dartboard-outer-ring');
-        if (outerRing) outerRing.classList.remove('flash-correct', 'flash-wrong');
         
         // Update display
         scoreValueEl.textContent = currentScore;
@@ -2335,9 +2316,7 @@ if (document.readyState === 'loading') {
         }
         
         console.log('Manual score set successfully:', score, 'Mode:', currentMode, 'Checkout:', checkout);
-        
-        // Re-enable dart clicks after brief delay (prevents tap-through from dismissing keyboard)
-        setTimeout(() => { manualScoreActive = false; }, 300);
+        window._manualScoreAppliedAt = Date.now();
       };
       
       // Prevent non-numeric input in real-time
@@ -2385,9 +2364,6 @@ if (document.readyState === 'loading') {
       editableDiv.addEventListener('blur', () => {
         applyScore();
       });
-      
-      // Block dart clicks while manual entry is active
-      manualScoreActive = true;
       
       // Replace text with editable div
       scoreValueEl.textContent = '';
@@ -2863,8 +2839,8 @@ if (document.readyState === 'loading') {
     }
     
     function handleDartClick(dartValue) {
-      // Block dart clicks during manual score entry
-      if (manualScoreActive) return;
+      // Ignore tap-through clicks right after manual score entry
+      if (window._manualScoreAppliedAt && Date.now() - window._manualScoreAppliedAt < 300) return;
       
       // Haptic feedback for dartboard clicks
       vibrateMedium();
