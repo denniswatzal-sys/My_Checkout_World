@@ -305,6 +305,16 @@ try {
   console.error('Could not load box dimming setting:', e);
 }
 
+// Load generation mode setting from localStorage
+try {
+  const savedGenerationMode = localStorage.getItem('dartTrainerGenerationMode');
+  if (savedGenerationMode !== null) {
+    window._savedGenerationMode = savedGenerationMode;
+  }
+} catch (e) {
+  console.error('Could not load generation mode setting:', e);
+}
+
 // Load numbers visible setting from localStorage
 try {
   const savedNumbersVisible = localStorage.getItem('dartTrainerNumbersVisible');
@@ -569,7 +579,8 @@ if (document.readyState === 'loading') {
     let recentlyGenerated = [];
     
     // Generation mode: 'random', 'ascending', 'descending'
-    let generationMode = 'random';
+    let generationMode = window._savedGenerationMode || 'random';
+    delete window._savedGenerationMode;
     let currentSequentialScore = null; // Track current position in sequential mode
     let currentSequentialMode = null; // Track current mode ('2darts'/'3darts') in mixed sequential mode
     
@@ -913,6 +924,7 @@ if (document.readyState === 'loading') {
         clearAntiRepetitionHistory();
       }
       
+      localStorage.setItem('dartTrainerGenerationMode', generationMode);
       console.log('Generation mode changed to:', generationMode, 'Starting score:', currentSequentialScore);
       
       // Always switch to 2-170 range when changing generation mode
@@ -1712,6 +1724,9 @@ if (document.readyState === 'loading') {
       }
       // Restore rangeCard visibility for background modal
       restoreRangeCardVisibility('background modal');
+      
+      // Always reset to 'background' tab when opening modal
+      setColorTarget('background');
       
       document.getElementById('backgroundModal').style.display = 'flex';
     }
@@ -5373,8 +5388,6 @@ if (document.readyState === 'loading') {
     }, 500);
     
     // Load problemScores from localStorage FIRST, then update badge
-    // RESET: Clear problemScores for fresh start (can be removed after first use)
-    localStorage.removeItem('problemScores');
     
     try {
       const savedProblems = localStorage.getItem('problemScores');
