@@ -3645,7 +3645,11 @@ if (document.readyState === 'loading') {
         } else {
           window.autoNextTimer = setTimeout(() => {
             window.autoNextTimer = null;
-            generateScore(currentRangeMin, currentRangeMax);
+            if (window.learnModeActive) {
+              generateLearnScore();
+            } else {
+              generateScore(currentRangeMin, currentRangeMax);
+            }
           }, 1200);
         }
       } else {
