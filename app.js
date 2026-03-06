@@ -230,7 +230,7 @@ function enterFullscreen() {
 let vibrationEnabled = true;
 
 // Global realistic mode state (loaded from localStorage)
-let realisticMode = true;
+let realisticMode = false;
 
 // Global show remaining score state (loaded from localStorage)
 let showRemainingScore = true;
@@ -470,7 +470,7 @@ function updateMenuItems() {
   // Update Freies Spiel menu item
   const realisticModeMenuItem = document.getElementById('realisticModeMenuItem');
   if (realisticModeMenuItem) {
-    realisticModeMenuItem.textContent = `Freies Spiel: ${realisticMode ? 'AN' : 'AUS'}`;
+    realisticModeMenuItem.textContent = `Genaues Spiel: ${realisticMode ? 'AUS' : 'AN'}`;
     
     // Deaktiviere im Lernmodus
     if (window.learnModeActive) {
@@ -1234,7 +1234,7 @@ if (document.readyState === 'loading') {
       {
         element: '#menuBtn',
         title: '⚙️ Einstellungen',
-        content: 'Im Einstellungsmenü findest du zusätzliche Optionen wie <em>Freies Spiel (Fehlwürfe erlaubt), Restwert ausblenden, Zahlenring ausblenden, Vibration ausschalten, Box ausblenden</em> und <em>Hintergrund anpassen</em>.<br><br><strong>Taste gedrückt halten</strong> – Vollbildmodus<br><strong>Taste antippen</strong> – Menü öffnen',
+        content: 'Im Einstellungsmenü findest du zusätzliche Optionen wie <em>Genaues Spiel (keine Fehlwürfe erlaubt), Restwert ausblenden, Zahlenring ausblenden, Vibration ausschalten, Box ausblenden</em> und <em>Hintergrund anpassen</em>.<br><br><strong>Taste gedrückt halten</strong> – Vollbildmodus<br><strong>Taste antippen</strong> – Menü öffnen',
         position: 'top-right',
         screen: 'training'
       },
