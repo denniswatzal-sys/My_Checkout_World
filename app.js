@@ -234,6 +234,7 @@ let realisticMode = true;
 
 // Global show remaining score state (loaded from localStorage)
 let showRemainingScore = true;
+let boxDimmingEnabled = false;
 
 // Challenge mode video shuffle playlist
 const challengeVideoList = ['Flugzeug.mp4', 'THE-MENACE.mp4', 'Waschmachine.mp4', 'Angler.mp4', 'Schlafen.mp4'];
@@ -294,6 +295,16 @@ try {
   console.error('Could not load realistic mode setting:', e);
 }
 
+// Load box dimming setting from localStorage
+try {
+  const savedBoxDimming = localStorage.getItem('dartTrainerBoxDimming');
+  if (savedBoxDimming !== null) {
+    boxDimmingEnabled = savedBoxDimming === 'true';
+  }
+} catch (e) {
+  console.error('Could not load box dimming setting:', e);
+}
+
 function vibrate(duration) {
   if (vibrationEnabled && 'vibrate' in navigator) {
     navigator.vibrate(duration);
@@ -332,6 +343,11 @@ function toggleVibration() {
   }
   
   console.log('Vibration', vibrationEnabled ? 'enabled' : 'disabled');
+}
+
+function toggleBoxDimming() {
+  boxDimmingEnabled = !boxDimmingEnabled;
+  localStorage.setItem('dartTrainerBoxDimming', boxDimmingEnabled.toString());
 }
 
 function toggleShowRemainingScore() {
@@ -418,6 +434,12 @@ function updateMenuItems() {
     vibrationMenuItem.textContent = `Vibration: ${vibrationEnabled ? 'AN' : 'AUS'}`;
   }
   
+  // Update Box ausblenden menu item
+  const boxDimmingMenuItem = document.getElementById('boxDimmingMenuItem');
+  if (boxDimmingMenuItem) {
+    boxDimmingMenuItem.textContent = `Box ausblenden: ${boxDimmingEnabled ? 'AN' : 'AUS'}`;
+  }
+
   // Update Restwert menu item
   const showRemainingMenuItem = document.getElementById('showRemainingMenuItem');
   if (showRemainingMenuItem) {
@@ -2747,21 +2769,20 @@ if (document.readyState === 'loading') {
       vibrateMedium();
       
       // Smooth dim rangeCard content on first dartboard click (3-second transition via CSS)
-      // DEAKTIVIERT - zum Reaktivieren den Kommentar entfernen
-      /*
-      const rangeCard = document.getElementById('rangeCard');
-      if (rangeCard && !window.rangeCardDimming) {
-        window.rangeCardDimming = true;  // Prevent further clicks from resetting
-        window.rangeCardActive = false;  // Mark as inactive (needs activation click)
-        
-        // Dim all children to 0%, border stays at 20%
-        Array.from(rangeCard.children).forEach(child => {
-          child.style.opacity = '0';
-        });
-        rangeCard.style.borderColor = 'rgba(255, 255, 255, 0.2)';  // Border 20% sichtbar
-        console.log('[DEBUG] RangeCard content dimming to 0% (border 20%) - 3-second smooth transition');
+      if (boxDimmingEnabled) {
+        const rangeCard = document.getElementById('rangeCard');
+        if (rangeCard && !window.rangeCardDimming) {
+          window.rangeCardDimming = true;  // Prevent further clicks from resetting
+          window.rangeCardActive = false;  // Mark as inactive (needs activation click)
+          
+          // Dim all children to 0%, border stays at 20%
+          Array.from(rangeCard.children).forEach(child => {
+            child.style.opacity = '0';
+          });
+          rangeCard.style.borderColor = 'rgba(255, 255, 255, 0.2)';  // Border 20% sichtbar
+          console.log('[DEBUG] RangeCard content dimming to 0% (border 20%) - 3-second smooth transition');
+        }
       }
-      */
       
       // Wenn Feedback für falsche Antwort angezeigt wird, nächste Aufgabe bei Klick auf Dartscheibe
       // (Richtige Antworten gehen automatisch weiter)
