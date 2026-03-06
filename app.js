@@ -230,7 +230,7 @@ function enterFullscreen() {
 let vibrationEnabled = true;
 
 // Global realistic mode state (loaded from localStorage)
-let realisticMode = false;
+let realisticMode = true;
 
 // Global show remaining score state (loaded from localStorage)
 let showRemainingScore = true;
