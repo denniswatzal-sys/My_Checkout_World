@@ -1210,11 +1210,11 @@ if (document.readyState === 'loading') {
       if (tutorialBtn) {
         tutorialBtn.classList.remove('pulse');
         localStorage.setItem('dartTrainerMysteryBoxPressed', 'true');
-        // Rename button after first press
+        // Rename button and change icon after first press
         const btnText = tutorialBtn.querySelector('.start-btn-text');
-        if (btnText) {
-          btnText.innerHTML = 'Bedienungs-<br>anleitung';
-        }
+        const btnIcon = tutorialBtn.querySelector('.start-btn-icon');
+        if (btnText) btnText.innerHTML = 'Bedienungs-<br>anleitung';
+        if (btnIcon) btnIcon.textContent = '📖';
       }
       
       // Ensure we're on the start screen
@@ -1553,11 +1553,11 @@ if (document.readyState === 'loading') {
           tutorialBtn.classList.add('pulse');
         }
       } else {
-        // Already pressed before - show proper label
+        // Already pressed before - show proper label and icon
         const btnText = document.querySelector('#btn-tutorial .start-btn-text');
-        if (btnText) {
-          btnText.innerHTML = 'Bedienungs-<br>anleitung';
-        }
+        const btnIcon = document.querySelector('#btn-tutorial .start-btn-icon');
+        if (btnText) btnText.innerHTML = 'Bedienungs-<br>anleitung';
+        if (btnIcon) btnIcon.textContent = '📖';
       }
       
       // Prevent tooltip clicks from closing tutorial
