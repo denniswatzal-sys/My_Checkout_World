@@ -2335,6 +2335,9 @@ if (document.readyState === 'loading') {
         }
         
         console.log('Manual score set successfully:', score, 'Mode:', currentMode, 'Checkout:', checkout);
+        
+        // Re-enable dart clicks after brief delay (prevents tap-through from dismissing keyboard)
+        setTimeout(() => { manualScoreActive = false; }, 300);
       };
       
       // Prevent non-numeric input in real-time
@@ -2382,6 +2385,9 @@ if (document.readyState === 'loading') {
       editableDiv.addEventListener('blur', () => {
         applyScore();
       });
+      
+      // Block dart clicks while manual entry is active
+      manualScoreActive = true;
       
       // Replace text with editable div
       scoreValueEl.textContent = '';
@@ -2857,6 +2863,9 @@ if (document.readyState === 'loading') {
     }
     
     function handleDartClick(dartValue) {
+      // Block dart clicks during manual score entry
+      if (manualScoreActive) return;
+      
       // Haptic feedback for dartboard clicks
       vibrateMedium();
       
