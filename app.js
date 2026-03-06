@@ -1210,6 +1210,11 @@ if (document.readyState === 'loading') {
       if (tutorialBtn) {
         tutorialBtn.classList.remove('pulse');
         localStorage.setItem('dartTrainerMysteryBoxPressed', 'true');
+        // Rename button after first press
+        const btnText = tutorialBtn.querySelector('.start-btn-text');
+        if (btnText) {
+          btnText.innerHTML = 'Bedienungs-<br>anleitung';
+        }
       }
       
       // Ensure we're on the start screen
@@ -1546,6 +1551,12 @@ if (document.readyState === 'loading') {
         const tutorialBtn = document.getElementById('btn-tutorial');
         if (tutorialBtn) {
           tutorialBtn.classList.add('pulse');
+        }
+      } else {
+        // Already pressed before - show proper label
+        const btnText = document.querySelector('#btn-tutorial .start-btn-text');
+        if (btnText) {
+          btnText.innerHTML = 'Bedienungs-<br>anleitung';
         }
       }
       
