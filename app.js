@@ -1220,11 +1220,6 @@ if (document.readyState === 'loading') {
       if (tutorialBtn) {
         tutorialBtn.classList.remove('pulse');
         localStorage.setItem('dartTrainerMysteryBoxPressed', 'true');
-        // Rename button and change icon after first press
-        const btnText = tutorialBtn.querySelector('.start-btn-text');
-        const btnIcon = tutorialBtn.querySelector('.start-btn-icon');
-        if (btnText) btnText.innerHTML = 'Bedienungs-<br>anleitung';
-        if (btnIcon) btnIcon.textContent = '📖';
       }
       
       // Ensure we're on the start screen
@@ -1282,6 +1277,17 @@ if (document.readyState === 'loading') {
       
       currentTutorialStep = stepIndex;
       const step = tutorialSteps[stepIndex];
+      
+      // Rename button when step 1 ("Willkommen") is reached
+      if (stepIndex >= 1) {
+        const tutorialBtn = document.getElementById('btn-tutorial');
+        if (tutorialBtn) {
+          const btnText = tutorialBtn.querySelector('.start-btn-text');
+          const btnIcon = tutorialBtn.querySelector('.start-btn-icon');
+          if (btnText) btnText.innerHTML = 'Bedienungs-<br>anleitung';
+          if (btnIcon) btnIcon.textContent = '📖';
+        }
+      }
       
       // Handle screen switching - BOTH DIRECTIONS
       const startScreen = document.getElementById('startScreen');
