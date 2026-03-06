@@ -1202,7 +1202,8 @@ if (document.readyState === 'loading') {
     
     function startTutorial() {
       vibrateMedium();
-      currentTutorialStep = 0;
+      const alreadyPressed = localStorage.getItem('dartTrainerMysteryBoxPressed') === 'true';
+      currentTutorialStep = alreadyPressed ? 1 : 0;
       tutorialActive = true;
       
       // Stop pulse animation and mark as pressed
