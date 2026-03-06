@@ -1284,6 +1284,53 @@ if (document.readyState === 'loading') {
       }
     }
     
+
+    // ========================================
+    // CENTRAL STATE RESET FUNCTION
+    // ========================================
+    // Setzt alle Spielzustände sauber zurück.
+    // Wird bei jedem Übergang aufgerufen (goToTrainer, Modals öffnen/schließen, Tutorial-Ende).
+    function resetTrainingState() {
+      // 1) Auto-timer stoppen
+      if (window.autoNextTimer) {
+        clearTimeout(window.autoNextTimer);
+        window.autoNextTimer = null;
+      }
+      
+      // 2) Spielvariablen zurücksetzen
+      feedback = null;
+      userInputs = [];
+      highlightedFields = [];
+      manualScoreActive = false;
+      isInErrorState = false;
+      currentRemainingScore = null;
+      dartsUsedInRound = 0;
+      errorStateCheckout = [];
+      dartsInErrorState = 0;
+      
+      // 3) DOM zurücksetzen
+      const userInputsEl = document.getElementById('userInputs');
+      if (userInputsEl) {
+        userInputsEl.innerHTML = '';
+        userInputsEl.classList.remove('correct', 'wrong', 'active');
+      }
+      
+      const scoreCard = document.getElementById('scoreCard');
+      if (scoreCard) {
+        scoreCard.classList.remove('error', 'warning');
+      }
+      
+      const outerRing = document.getElementById('dartboard-outer-ring');
+      if (outerRing) {
+        outerRing.classList.remove('flash-correct', 'flash-wrong');
+      }
+      
+      const scoreRemainingEl = document.getElementById('scoreRemaining');
+      if (scoreRemainingEl) {
+        scoreRemainingEl.textContent = '';
+      }
+    }
+
     // ========================================
     // TUTORIAL SYSTEM
     // ========================================
@@ -1520,13 +1567,7 @@ if (document.readyState === 'loading') {
       }
       
       // Reset any tutorial-specific state
-      userInputs = [];
-      feedback = null;
-      const container = document.getElementById('userInputs');
-      if (container) {
-        container.innerHTML = '';
-        container.classList.remove('correct', 'wrong', 'active');
-      }
+      resetTrainingState();
       
       // Generate a fresh score for training
       generateScore(currentRangeMin, currentRangeMax);
@@ -1652,6 +1693,11 @@ if (document.readyState === 'loading') {
     }
     
     function showBackgroundModal() {
+      // Cancel any running auto-advance timer before opening modal
+      if (window.autoNextTimer) {
+        clearTimeout(window.autoNextTimer);
+        window.autoNextTimer = null;
+      }
       // Restore rangeCard visibility for background modal
       restoreRangeCardVisibility('background modal');
       
@@ -4383,6 +4429,11 @@ if (document.readyState === 'loading') {
     }
     
     function openSettings() {
+      // Cancel any running auto-advance timer before opening modal
+      if (window.autoNextTimer) {
+        clearTimeout(window.autoNextTimer);
+        window.autoNextTimer = null;
+      }
       const modal = document.getElementById('settingsModal');
       const list = document.getElementById('checkoutList');
       
@@ -4519,6 +4570,7 @@ if (document.readyState === 'loading') {
     
     function goToTrainer() {
       vibrateMedium();
+      resetTrainingState();
       document.getElementById('startScreen').style.display = 'none';
       document.getElementById('mainApp').style.display = 'block';
       
@@ -4628,7 +4680,11 @@ if (document.readyState === 'loading') {
     
     function openLeaderboard(currentEntry = null) {
       vibrateMedium();
-      
+      // Cancel any running auto-advance timer before opening modal
+      if (window.autoNextTimer) {
+        clearTimeout(window.autoNextTimer);
+        window.autoNextTimer = null;
+      }
       // Restore rangeCard visibility for leaderboard modal
       restoreRangeCardVisibility('leaderboard modal');
       
