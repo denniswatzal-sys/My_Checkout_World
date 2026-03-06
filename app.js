@@ -2779,8 +2779,7 @@ if (document.readyState === 'loading') {
           Array.from(rangeCard.children).forEach(child => {
             child.style.opacity = '0';
           });
-          rangeCard.style.borderColor = 'rgba(255, 255, 255, 0.2)';  // Border 20% sichtbar
-          console.log('[DEBUG] RangeCard content dimming to 0% (border 20%) - 3-second smooth transition');
+          console.log('[DEBUG] RangeCard content dimming to 0% - 3-second smooth transition');
         }
       }
       
