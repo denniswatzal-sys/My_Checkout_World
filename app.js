@@ -1059,7 +1059,7 @@ if (document.readyState === 'loading') {
         screen: 'start'
       },
       {
-        element: '#scoreRemaining',
+        element: '#scoreCard',
         title: '🔓 Checkout-Zahl',
         content: 'Hier wird dir die zu checkende Zahl sowie der Restwert angezeigt. Durch Antippen kannst du sie manuell ändern.<br><br><strong>Bedeutung der Feldfarben:</strong><br><strong style="color: #16a34a;">Grün</strong> – 3-Dart-Finish (3DF)<br><strong style="color: #3b82f6;">Blau</strong> – 2-Dart-Finish (2DF)<br><strong style="color: #eab308;">Gelb</strong> – Bogey-Zahl<br><br><strong>Nur im freien Spiel:</strong><br><strong style="color: #f97316;">Orange</strong> – Checken noch möglich<br><strong style="color: #dc2626;">Rot</strong> – Checken nicht mehr möglich',
         position: 'bottom',
