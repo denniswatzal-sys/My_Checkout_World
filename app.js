@@ -5583,4 +5583,11 @@ document.addEventListener('DOMContentLoaded', function() {
 // Initialize menu items on page load
 document.addEventListener('DOMContentLoaded', function() {
   updateMenuItems();
+  
+  // Restore generation mode button icon
+  const genModeBtn = document.getElementById('generationModeBtn');
+  if (genModeBtn) {
+    const icons = { 'random': '🔀', 'repeat': '🔁', 'ascending': '⬆️', 'descending': '⬇️' };
+    genModeBtn.textContent = icons[generationMode] || '🔀';
+  }
 });
