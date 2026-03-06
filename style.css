@@ -1220,6 +1220,7 @@
       width: 0;
       height: 0;
       border: 12px solid transparent;
+      filter: drop-shadow(0 0 2px #059669) drop-shadow(0 0 2px #059669);
     }
     
     @keyframes arrowBounceDown {
@@ -1303,95 +1304,7 @@
       display: none;
     }
     
-    /* Green border arrow (behind red arrow) */
-    .tutorial-tooltip::after {
-      content: '';
-      position: absolute;
-      width: 0;
-      height: 0;
-      border: 15px solid transparent;
-      z-index: -1;
-    }
-    
-    .tutorial-tooltip[data-position="bottom"]::after {
-      top: -30px;
-      left: 50%;
-      transform: translateX(-50%);
-      border-bottom-color: #059669;
-      animation: arrowBounceDownBorder 0.8s ease-in-out infinite;
-    }
-    @keyframes arrowBounceDownBorder {
-      0%, 100% { top: -30px; }
-      50% { top: -36px; }
-    }
-    
-    .tutorial-tooltip[data-position="bottom-right"]::after {
-      top: -30px;
-      left: 27px;
-      border-bottom-color: #059669;
-      animation: arrowBounceDownBorder 0.8s ease-in-out infinite;
-    }
-    
-    .tutorial-tooltip[data-position="bottom-left"]::after {
-      top: -30px;
-      right: 27px;
-      border-bottom-color: #059669;
-      animation: arrowBounceDownBorder 0.8s ease-in-out infinite;
-    }
-    
-    .tutorial-tooltip[data-position="top"]::after {
-      bottom: -30px;
-      left: 50%;
-      transform: translateX(-50%);
-      border-top-color: #059669;
-      animation: arrowBounceUpBorder 0.8s ease-in-out infinite;
-    }
-    @keyframes arrowBounceUpBorder {
-      0%, 100% { bottom: -30px; }
-      50% { bottom: -36px; }
-    }
-    
-    .tutorial-tooltip[data-position="top-right"]::after {
-      bottom: -30px;
-      right: 7px;
-      border-top-color: #059669;
-      animation: arrowBounceUpBorder 0.8s ease-in-out infinite;
-    }
-    
-    .tutorial-tooltip[data-position="top-left"]::after {
-      bottom: -30px;
-      right: 7px;
-      border-top-color: #059669;
-      animation: arrowBounceUpBorder 0.8s ease-in-out infinite;
-    }
-    
-    .tutorial-tooltip[data-position="left"]::after {
-      right: -30px;
-      top: 50%;
-      transform: translateY(-50%);
-      border-left-color: #059669;
-      animation: arrowBounceLeftBorder 0.8s ease-in-out infinite;
-    }
-    @keyframes arrowBounceLeftBorder {
-      0%, 100% { right: -30px; }
-      50% { right: -36px; }
-    }
-    
-    .tutorial-tooltip[data-position="right"]::after {
-      left: -30px;
-      top: 50%;
-      transform: translateY(-50%);
-      border-right-color: #059669;
-      animation: arrowBounceRightBorder 0.8s ease-in-out infinite;
-    }
-    @keyframes arrowBounceRightBorder {
-      0%, 100% { left: -30px; }
-      50% { left: -36px; }
-    }
-    
-    .tutorial-tooltip[data-position="center"]::after {
-      display: none;
-    }
+    .tutorial-dots {
       display: flex;
       gap: 6px;
       justify-content: center;
