@@ -4523,6 +4523,18 @@ if (document.readyState === 'loading') {
       document.getElementById('startScreen').style.display = 'none';
       document.getElementById('mainApp').style.display = 'block';
       
+      // Reset rangeCard dimming state
+      window.rangeCardDimming = false;
+      window.rangeCardActive = true;
+      const rangeCard = document.getElementById('rangeCard');
+      if (rangeCard) {
+        Array.from(rangeCard.children).forEach(child => {
+          child.style.transition = '';
+          child.style.opacity = '1';
+        });
+        rangeCard.style.borderColor = '';
+      }
+      
       // Restore correct mode and regenerate score to prevent mode mismatch
       if (currentMode === '3darts') {
         currentCheckouts = defaultCheckouts;
