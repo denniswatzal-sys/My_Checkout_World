@@ -1227,7 +1227,7 @@ if (document.readyState === 'loading') {
       }
       
       document.getElementById('tutorialOverlay').classList.add('active');
-      showTutorialStep(0);
+      showTutorialStep(currentTutorialStep);
       
       // Enter fullscreen
       enterFullscreen();
