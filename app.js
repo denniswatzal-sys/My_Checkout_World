@@ -1636,6 +1636,17 @@ if (document.readyState === 'loading') {
           console.log('Swipe down detected - previous tutorial step');
           prevTutorialStep();
         }
+      } else {
+        // Swipe right (previous step)
+        if (diffX > 50) {
+          console.log('Swipe right detected - previous tutorial step');
+          prevTutorialStep();
+        }
+        // Swipe left (next step)
+        else if (diffX < -50) {
+          console.log('Swipe left detected - next tutorial step');
+          nextTutorialStep();
+        }
       }
     }
     
