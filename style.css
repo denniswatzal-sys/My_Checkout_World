@@ -1411,8 +1411,7 @@
     
     .tutorial-dot.active {
       background: #059669;
-      width: 24px;
-      border-radius: 4px;
+      border-radius: 50%;
     }
     
     .tutorial-dot.active:hover {
