@@ -5485,6 +5485,9 @@ if (document.readyState === 'loading') {
         // Swipe from left to right (at least 100px)
         if (diffX > 100) {
           console.log('Swipe right detected - going to start screen');
+          if (window.challengeMode) {
+            cancelChallenge();
+          }
           goToStart();
         }
       }
