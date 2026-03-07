@@ -1296,6 +1296,7 @@ if (document.readyState === 'loading') {
         });
         
         rangeCard.style.borderColor = 'white';  // Restore full border
+        rangeCard.style.background = '';         // Restore original background
         window.rangeCardDimming = false;
         window.rangeCardActive = true;
         console.log('[DEBUG] RangeCard restored to 100%' + (context ? ' - ' + context : ''));
@@ -2840,10 +2841,12 @@ if (document.readyState === 'loading') {
           window.rangeCardDimming = true;  // Prevent further clicks from resetting
           window.rangeCardActive = false;  // Mark as inactive (needs activation click)
           
-          // Dim all children to 0%, border stays at 20%
+          // Dim all children to 0%, set dark background and subtle border
           Array.from(rangeCard.children).forEach(child => {
             child.style.opacity = '0';
           });
+          rangeCard.style.background = 'rgba(0,0,0,0.5)';
+          rangeCard.style.borderColor = 'rgba(255,255,255,0.35)';
           console.log('[DEBUG] RangeCard content dimming to 0% - 3-second smooth transition');
         }
       }
