@@ -3897,6 +3897,7 @@ if (document.readyState === 'loading') {
         window.learnModeActive = false;
         
         // FORCE: Deaktiviere Realistisch-Modus im Challenge
+        window.realisticModeBeforeChallenge = realisticMode;  // Save before overriding
         realisticMode = false;
         
         // Reset realistic mode state
@@ -4177,9 +4178,14 @@ if (document.readyState === 'loading') {
         genModeBtn.textContent = '🔀';
       }
       
-      // Restore realistic mode from localStorage
-      const savedRealisticMode = localStorage.getItem('dartTrainerRealisticMode');
-      realisticMode = savedRealisticMode === 'true';
+      // Restore realistic mode from before challenge
+      if (typeof window.realisticModeBeforeChallenge !== 'undefined') {
+        realisticMode = window.realisticModeBeforeChallenge;
+        window.realisticModeBeforeChallenge = undefined;
+      } else {
+        const savedRealisticMode = localStorage.getItem('dartTrainerRealisticMode');
+        realisticMode = savedRealisticMode === 'true';
+      }
       
       // Update menu items
       updateMenuItems();
