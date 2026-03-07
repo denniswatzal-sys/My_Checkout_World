@@ -1641,7 +1641,10 @@ if (document.readyState === 'loading') {
     
     // Tutorial event listeners
     document.addEventListener('DOMContentLoaded', function() {
-      document.getElementById('tutorialClose').addEventListener('click', endTutorial);
+      document.getElementById('tutorialClose').addEventListener('click', function() {
+        endTutorial();
+        goToStart();
+      });
       document.getElementById('tutorialNext').addEventListener('click', nextTutorialStep);
       document.getElementById('tutorialBack').addEventListener('click', prevTutorialStep);
       document.getElementById('tutorialOverlay').addEventListener('click', function(e) {
