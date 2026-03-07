@@ -404,7 +404,7 @@
     }
     
     .challenge-card {
-      background: #fef3c7;
+      background: rgba(0,0,0,0.5);
       padding: 12px;
       border-radius: 8px;
       margin-bottom: 12px;
@@ -413,7 +413,7 @@
       grid-template-rows: auto auto;
       gap: 12px;
       align-items: center;
-      border: 2px solid #f59e0b;
+      border: 2px solid rgba(255,255,255,0.15);
     }
     
     .challenge-gif {
@@ -463,13 +463,13 @@
     .challenge-time {
       font-size: 20px;
       font-weight: bold;
-      color: #92400e;
+      color: rgba(255,255,255,0.9);
     }
     
     .challenge-stats {
       font-size: 15px;
       font-weight: 600;
-      color: #92400e;
+      color: rgba(255,255,255,0.75);
     }
     
     .challenge-cancel-btn {
