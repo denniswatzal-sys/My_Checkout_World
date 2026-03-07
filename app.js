@@ -1857,11 +1857,11 @@ if (document.readyState === 'loading') {
       if (colorTarget === 'field') {
         const rangeCard = document.querySelector('#rangeCard');
         if (rangeCard) {
-          rangeCard.style.background = 'rgba(0,0,0,0.5)';
-          rangeCard.style.border = '1px solid rgba(255,255,255,0.35)';
+          rangeCard.style.background = 'transparent';
+          rangeCard.style.border = '1px solid white';
         }
-        localStorage.setItem('dartTrainerFieldCustom', 'rgba(0,0,0,0.5)');
-        localStorage.setItem('dartTrainerFieldBorder', '1px solid rgba(255,255,255,0.35)');
+        localStorage.setItem('dartTrainerFieldCustom', 'transparent');
+        localStorage.setItem('dartTrainerFieldBorder', '1px solid white');
       }
     }
     
@@ -5320,6 +5320,7 @@ if (document.readyState === 'loading') {
           });
           
           rangeCard.style.borderColor = 'white';  // Restore full border
+          rangeCard.style.background = '';         // Restore original background
           window.rangeCardDimming = false;
           window.rangeCardActive = true;  // Mark as active for next click
           console.log('[DEBUG] RangeCard restored to 100% (first click - buttons not active yet)');
