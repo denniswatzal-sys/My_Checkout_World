@@ -1296,7 +1296,7 @@ if (document.readyState === 'loading') {
         });
         
         rangeCard.style.borderColor = 'white';  // Restore full border
-        rangeCard.style.background = '';         // Restore original background
+        rangeCard.style.background = window.rangeCardOriginalBackground || '';  // Restore original background
         window.rangeCardDimming = false;
         window.rangeCardActive = true;
         console.log('[DEBUG] RangeCard restored to 100%' + (context ? ' - ' + context : ''));
@@ -2840,6 +2840,7 @@ if (document.readyState === 'loading') {
         if (rangeCard && !window.rangeCardDimming) {
           window.rangeCardDimming = true;  // Prevent further clicks from resetting
           window.rangeCardActive = false;  // Mark as inactive (needs activation click)
+          window.rangeCardOriginalBackground = rangeCard.style.background;  // Save original background
           
           // Dim all children to 0%, set dark background and subtle border
           Array.from(rangeCard.children).forEach(child => {
@@ -5320,7 +5321,7 @@ if (document.readyState === 'loading') {
           });
           
           rangeCard.style.borderColor = 'white';  // Restore full border
-          rangeCard.style.background = '';         // Restore original background
+          rangeCard.style.background = window.rangeCardOriginalBackground || '';  // Restore original background
           window.rangeCardDimming = false;
           window.rangeCardActive = true;  // Mark as active for next click
           console.log('[DEBUG] RangeCard restored to 100% (first click - buttons not active yet)');
