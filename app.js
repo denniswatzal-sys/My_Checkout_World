@@ -2840,7 +2840,7 @@ if (document.readyState === 'loading') {
         if (rangeCard && !window.rangeCardDimming) {
           window.rangeCardDimming = true;  // Prevent further clicks from resetting
           window.rangeCardActive = false;  // Mark as inactive (needs activation click)
-          window.rangeCardOriginalBackground = rangeCard.style.background;  // Save original background
+          window.rangeCardOriginalBackground = rangeCard.style.background || localStorage.getItem('dartTrainerFieldCustom') || '';  // Save original background
           
           // Dim all children to 0%, set dark background and subtle border
           Array.from(rangeCard.children).forEach(child => {
