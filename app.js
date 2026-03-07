@@ -1240,7 +1240,7 @@ if (document.readyState === 'loading') {
       },
       {
         element: '#dartboard',
-        title: '🏁 Ende der Fahnenstange',
+        title: 'Ende der Fahnenstange',
         content: 'Du hast alle wichtigen Funktionen<br>kennengelernt. Jetzt bist du bereit!<br><br>Viel Erfolg – und vor allem: Viel Spaß<br>beim Training! 🎯',
         position: 'center',
         screen: 'training'
@@ -1499,7 +1499,11 @@ if (document.readyState === 'loading') {
       
       // Update button texts
       backBtn.textContent = '<';
-      nextBtn.textContent = '>';
+      if (stepIndex === tutorialSteps.length - 1) {
+        nextBtn.textContent = '🏁';
+      } else {
+        nextBtn.textContent = '>';
+      }
     }
       
     
