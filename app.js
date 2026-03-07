@@ -1296,7 +1296,9 @@ if (document.readyState === 'loading') {
         });
         
         rangeCard.style.borderColor = 'white';  // Restore full border
-        rangeCard.style.background = window.rangeCardOriginalBackground || '';  // Restore original background
+        if (window.rangeCardDimming) {
+          rangeCard.style.background = window.rangeCardOriginalBackground || '';  // Restore original background only if was dimmed
+        }
         window.rangeCardDimming = false;
         window.rangeCardActive = true;
         console.log('[DEBUG] RangeCard restored to 100%' + (context ? ' - ' + context : ''));
