@@ -2275,6 +2275,7 @@ if (document.readyState === 'loading') {
         
         // Set the score and run the same cleanup as generateScore
         currentScore = score;
+        manualScoreActive = true;
         applyScoreDisplay();
         
         // Always switch to 2-170 range when manually entering a score
