@@ -2174,6 +2174,19 @@ if (document.readyState === 'loading') {
         return;
       }
       
+      // Prevent re-opening if editor is already active (guards against ghost clicks on mobile)
+      const scoreValueEl = document.getElementById('scoreValue');
+      if (scoreValueEl.querySelector('[data-score-editor]')) {
+        console.log('Manual score editor already open - ignoring');
+        return;
+      }
+      
+      // Brief cooldown after closing to block ghost clicks
+      if (window._manualScoreCooldown) {
+        console.log('Manual score cooldown active - ignoring');
+        return;
+      }
+      
       console.log('Opening inline edit for score - Current mode:', currentMode);
       
       const scoreValueEl = document.getElementById('scoreValue');
@@ -2314,6 +2327,10 @@ if (document.readyState === 'loading') {
           updateHintText();
         }
         
+        // Set cooldown to block ghost clicks on mobile for 500ms
+        window._manualScoreCooldown = true;
+        setTimeout(() => { window._manualScoreCooldown = false; }, 500);
+        
         console.log('Manual score set successfully:', score, 'Mode:', currentMode, 'Checkout:', checkout);
       };
       
@@ -2417,6 +2434,7 @@ if (document.readyState === 'loading') {
       dartsUsedInRound = 0;
       errorStateCheckout = [];
       dartsInErrorState = 0;
+      maxDartsForRound = currentCheckouts === twoDartCheckouts ? 2 : 3;
       
       if (isStell) {
         scoreCard.classList.add('stell');
