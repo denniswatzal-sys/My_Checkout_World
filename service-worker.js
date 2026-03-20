@@ -1,4 +1,4 @@
-const CACHE_NAME = 'checkout-world-v2-TEST5SEC';
+const CACHE_NAME = 'checkout-world-v3';
 const urlsToCache = [
   './',
   './index.html',
@@ -12,6 +12,7 @@ const urlsToCache = [
 
 // Installation - Cache alle wichtigen Dateien
 self.addEventListener('install', event => {
+  self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
@@ -22,7 +23,7 @@ self.addEventListener('install', event => {
   );
 });
 
-// Aktivierung - Lösche alte Caches
+// Aktivierung - Lösche alte Caches und übernehme sofort
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(cacheNames => {
@@ -34,43 +35,28 @@ self.addEventListener('activate', event => {
           }
         })
       );
-    })
+    }).then(() => self.clients.claim())
   );
 });
 
-// Fetch - Lade aus Cache wenn verfügbar, sonst aus Netzwerk
+// Fetch - Network First: Immer zuerst Netzwerk versuchen, Cache nur als Fallback
 self.addEventListener('fetch', event => {
   event.respondWith(
-    caches.match(event.request)
+    fetch(event.request)
       .then(response => {
-        // Cache hit - return response
-        if (response) {
-          return response;
-        }
-        
-        // Clone the request
-        const fetchRequest = event.request.clone();
-        
-        return fetch(fetchRequest).then(response => {
-          // Check if valid response
-          if (!response || response.status !== 200 || response.type !== 'basic') {
-            return response;
-          }
-          
-          // Clone the response
+        // Gültige Antwort vom Netzwerk - Cache aktualisieren
+        if (response && response.status === 200 && response.type === 'basic') {
           const responseToCache = response.clone();
-          
-          caches.open(CACHE_NAME)
-            .then(cache => {
-              cache.put(event.request, responseToCache);
-            });
-          
-          return response;
-        });
+          caches.open(CACHE_NAME).then(cache => {
+            cache.put(event.request, responseToCache);
+          });
+        }
+        return response;
       })
       .catch(() => {
-        // Fallback für offline
-        console.log('Service Worker: Fetch failed, serving offline page');
+        // Kein Netzwerk - aus Cache laden (Offline-Fallback)
+        console.log('Service Worker: Offline - serving from cache');
+        return caches.match(event.request);
       })
   );
 });

@@ -418,7 +418,7 @@ function toggleRealisticMode() {
   // Reset userInputs display
   const userInputsContainer = document.getElementById('userInputs');
   if (userInputsContainer) {
-    userInputsContainer.classList.remove('correct', 'wrong', 'active');
+    userInputsContainer.classList.remove('correct', 'wrong', 'warning', 'active');
     const existingSolution = userInputsContainer.querySelector('.solution-text');
     if (existingSolution) {
       existingSolution.remove();
@@ -714,6 +714,15 @@ if (document.readyState === 'loading') {
       bull.style.cursor = 'pointer';
       bull.onclick = () => handleDartClick('Bull');
       svg.appendChild(bull);
+      
+      // Oranges Leuchten nach Neuaufbau wiederherstellen falls aktiv
+      if (window.warningFlashActive) {
+        const outerRing = document.getElementById('dartboard-outer-ring');
+        if (outerRing) {
+          outerRing.style.stroke = '#f97316';
+          outerRing.style.filter = 'drop-shadow(0 0 10px rgba(249, 115, 22, 1))';
+        }
+      }
     }
     
     function createSegment(svg, innerR, outerR, startA, endA, fill, stroke, strokeWidth, onClick) {
@@ -788,6 +797,7 @@ if (document.readyState === 'loading') {
       // Deaktiviere Lernmodus wenn Modus gewechselt wird
       if (window.learnModeActive) {
         window.learnModeActive = false;
+        restoreRealisticModeAfterLearn();
         const learnBtn = document.getElementById('learnBtn');
         if (learnBtn) {
           learnBtn.classList.remove('active-range');
@@ -804,7 +814,7 @@ if (document.readyState === 'loading') {
       // Reset userInputs display
       const userInputsContainer = document.getElementById('userInputs');
       if (userInputsContainer) {
-        userInputsContainer.classList.remove('correct', 'wrong', 'active');
+        userInputsContainer.classList.remove('correct', 'wrong', 'warning', 'active');
         const existingSolution = userInputsContainer.querySelector('.solution-text');
         if (existingSolution) {
           existingSolution.remove();
@@ -953,6 +963,7 @@ if (document.readyState === 'loading') {
       // Deactivate learn mode if active
       if (window.learnModeActive) {
         window.learnModeActive = false;
+        restoreRealisticModeAfterLearn();
         const learnBtn = document.getElementById('learnBtn');
         if (learnBtn) {
           learnBtn.classList.remove('active-range');
@@ -1145,7 +1156,7 @@ if (document.readyState === 'loading') {
           container.innerHTML = userInputs.map(input => 
             `<div class="user-input-chip">${input}</div>`
           ).join('');
-          container.classList.remove('correct', 'wrong', 'active');
+          container.classList.remove('correct', 'wrong', 'warning', 'active');
           
           // Make sure the box is visible
           container.style.display = 'flex';
@@ -1339,7 +1350,7 @@ if (document.readyState === 'loading') {
       const userInputsEl = document.getElementById('userInputs');
       if (userInputsEl) {
         userInputsEl.innerHTML = '';
-        userInputsEl.classList.remove('correct', 'wrong', 'active');
+        userInputsEl.classList.remove('correct', 'wrong', 'warning', 'active');
       }
       
       const scoreCard = document.getElementById('scoreCard');
@@ -1531,7 +1542,6 @@ if (document.readyState === 'loading') {
       tooltip.style.transformOrigin = 'top left';
       
       const rect = element.getBoundingClientRect();
-      // Skalierte Dimensionen für Positionsberechnung
       const tooltipRect = tooltip.getBoundingClientRect();
       const scaledWidth = TOOLTIP_BASE_WIDTH * scale;
       const scaledHeight = tooltipRect.height;
@@ -1577,7 +1587,6 @@ if (document.readyState === 'loading') {
           break;
       }
       
-      // Im Viewport halten
       if (left < margin) left = margin;
       if (left + scaledWidth > window.innerWidth - margin) {
         left = window.innerWidth - scaledWidth - margin;
@@ -2151,6 +2160,7 @@ if (document.readyState === 'loading') {
       }
       
       window.learnModeActive = false;
+        restoreRealisticModeAfterLearn();
       currentRangeMin = min;
       currentRangeMax = max;
       
@@ -2302,6 +2312,7 @@ if (document.readyState === 'loading') {
         // Deactivate learn mode if active
         if (window.learnModeActive) {
           window.learnModeActive = false;
+        restoreRealisticModeAfterLearn();
           const learnBtn = document.getElementById('learnBtn');
           if (learnBtn) {
             learnBtn.classList.remove('active-range');
@@ -2414,7 +2425,7 @@ if (document.readyState === 'loading') {
       
       const userInputsEl = document.getElementById('userInputs');
       userInputsEl.innerHTML = '';
-      userInputsEl.classList.remove('correct', 'wrong', 'active');
+      userInputsEl.classList.remove('correct', 'wrong', 'warning', 'active');
       
       // Remove remaining score display
       const scoreRemainingEl = document.getElementById('scoreRemaining');
@@ -2422,7 +2433,7 @@ if (document.readyState === 'loading') {
       
       // Remove glow from outer ring
       const outerRing = document.getElementById('dartboard-outer-ring');
-      if (outerRing) outerRing.classList.remove('flash-correct', 'flash-wrong');
+      if (outerRing) outerRing.classList.remove('flash-correct', 'flash-wrong', 'flash-warning');
       
       const isStell = stellZahlen.includes(currentScore);
       const scoreCard = document.getElementById('scoreCard');
@@ -3044,6 +3055,13 @@ if (document.readyState === 'loading') {
           highlightedFields.push(dartValue);
           createDartboard();
           
+          // Oranges Leuchten nach Neuaufbau wiederherstellen (noch im Error-State)
+          const outerRingStill = document.getElementById('dartboard-outer-ring');
+          if (outerRingStill) {
+            outerRingStill.style.stroke = '#f97316';
+            outerRingStill.style.filter = 'drop-shadow(0 0 10px rgba(249, 115, 22, 1))';
+          }
+          
           // Prüfe ob Checkout mit restlichen Darts noch möglich ist
           const dartsLeft = maxDartsForRound - dartsUsedInRound;
           console.log(`[DEBUG] Prüfe Checkout-Möglichkeit: Restwert ${currentRemainingScore}, Darts übrig: ${dartsLeft}`);
@@ -3243,22 +3261,18 @@ if (document.readyState === 'loading') {
             // Vibration und Dartboard-Flash
             vibrateHeavy();
             
-            const outerRing = document.getElementById('dartboard-outer-ring');
-            if (outerRing) {
-              outerRing.classList.remove('flash-correct', 'flash-wrong', 'challenge-mode');
-              void outerRing.offsetWidth;
-              if (window.challengeMode) {
-                outerRing.classList.add('challenge-mode');
-              }
-              outerRing.classList.add('flash-wrong');
-            }
-            
             // Dartboard neu zeichnen mit Highlight
             createDartboard();
+            showFeedback(false, 'wrong');
             
             if (window.challengeMode) {
               challengeStats.wrong++;
               updateChallengeStats();
+            } else {
+              const actualMode = currentCheckouts === twoDartCheckouts ? '2darts' : '3darts';
+              problemScores[currentScore] = { count: 0, mode: actualMode };
+              localStorage.setItem('problemScores', JSON.stringify(problemScores));
+              updateProblemBadge();
             }
             
             // Beende Error-State und warte auf Klick
@@ -3271,16 +3285,6 @@ if (document.readyState === 'loading') {
           // KEIN showFeedback - Box ist schon da!
           // Nur Vibration und Dartboard-Flash
           vibrateHeavy();
-          
-          const outerRing = document.getElementById('dartboard-outer-ring');
-          if (outerRing) {
-            outerRing.classList.remove('flash-correct', 'flash-wrong', 'challenge-mode');
-            void outerRing.offsetWidth;
-            if (window.challengeMode) {
-              outerRing.classList.add('challenge-mode');
-            }
-            outerRing.classList.add('flash-wrong');
-          }
           
           // Dartboard neu zeichnen mit Highlight
           createDartboard();
@@ -3301,10 +3305,16 @@ if (document.readyState === 'loading') {
               updateChallengeStats();
             }
             
-            // WICHTIG: Beende Error-State damit keine weiteren Darts möglich sind
-            isInErrorState = false;
+            // Flash rot
+            const outerRingRed = document.getElementById('dartboard-outer-ring');
+            if (outerRingRed) {
+              outerRingRed.classList.remove('flash-correct', 'flash-wrong', 'flash-warning', 'challenge-mode');
+              void outerRingRed.offsetWidth;
+              outerRingRed.classList.add('flash-wrong');
+            }
+            window.warningFlashActive = false;
             
-            // Setze feedback = 'wrong' damit beim nächsten Klick neue Zahl generiert wird
+            isInErrorState = false;
             feedback = 'wrong';
             
             return;
@@ -3312,8 +3322,17 @@ if (document.readyState === 'loading') {
           
           // Checkout noch möglich - Score-Card orange färben
           const scoreCardWarning = document.getElementById('scoreCard');
-          scoreCardWarning.classList.remove('error'); // Entferne rot falls vorhanden
-          scoreCardWarning.classList.add('warning'); // Setze orange
+          scoreCardWarning.classList.remove('error');
+          scoreCardWarning.classList.add('warning');
+          
+          // Flash orange
+          const outerRingOrange = document.getElementById('dartboard-outer-ring');
+          if (outerRingOrange) {
+            outerRingOrange.classList.remove('flash-correct', 'flash-wrong', 'flash-warning', 'challenge-mode');
+            void outerRingOrange.offsetWidth;
+            outerRingOrange.classList.add('flash-warning');
+          }
+          window.warningFlashActive = true;
           
           if (window.challengeMode) {
             challengeStats.wrong++;
@@ -3357,11 +3376,11 @@ if (document.readyState === 'loading') {
             scoreCard.classList.remove('warning');
             scoreCard.classList.add('error');
             
-            // Zeige Feedback
-            showFeedback(false);
-            
             // Dartboard neu zeichnen mit Highlight
             createDartboard();
+            
+            // Zeige Feedback
+            showFeedback(false, 'wrong');
             
             if (window.challengeMode) {
               challengeStats.wrong++;
@@ -3436,15 +3455,20 @@ if (document.readyState === 'loading') {
             scoreCard.classList.remove('warning'); // Entferne warning falls vorhanden
             scoreCard.classList.add('error');
             
-            // Zeige Feedback
-            showFeedback(false);
-            
             // Dartboard neu zeichnen mit Highlight
             createDartboard();
+            
+            // Zeige Feedback
+            showFeedback(false);
             
             if (window.challengeMode) {
               challengeStats.wrong++;
               updateChallengeStats();
+            } else {
+              const actualMode = currentCheckouts === twoDartCheckouts ? '2darts' : '3darts';
+              problemScores[currentScore] = { count: 0, mode: actualMode };
+              localStorage.setItem('problemScores', JSON.stringify(problemScores));
+              updateProblemBadge();
             }
             
             // Beende Error-State und warte auf Klick
@@ -3456,14 +3480,15 @@ if (document.readyState === 'loading') {
           
           // Score-Card orange färben (Fehlwurf, aber Checkout noch möglich)
           const scoreCard = document.getElementById('scoreCard');
-          scoreCard.classList.remove('error'); // Entferne error falls vorhanden
+          scoreCard.classList.remove('error');
           scoreCard.classList.add('warning');
-          
-          // Zeige Feedback mit Restwert
-          showFeedback(false);
           
           // Dartboard neu zeichnen mit Highlight
           createDartboard();
+          
+          // Orange Leuchten
+          showFeedback(false, 'warning');
+          window.warningFlashActive = true;
           
           if (window.challengeMode) {
             challengeStats.wrong++;
@@ -3475,7 +3500,8 @@ if (document.readyState === 'loading') {
             updateProblemBadge();
           }
         } else {
-          // Normal Mode: Wie bisher (kein Highlight bei Fehlwurf)
+          // Normal Mode: createDartboard() zuerst damit flash zuverlässig funktioniert
+          createDartboard();
           showFeedback(false);
           if (window.challengeMode) {
             challengeStats.wrong++;
@@ -3527,6 +3553,7 @@ if (document.readyState === 'loading') {
               
               // Deactivate learn mode FIRST
               window.learnModeActive = false;
+        restoreRealisticModeAfterLearn();
               
               // IMPORTANT: Re-enable Freies spielen button IMMEDIATELY
               console.log('Calling updateMenuItems IMMEDIATELY - learnModeActive:', window.learnModeActive);
@@ -3708,20 +3735,21 @@ if (document.readyState === 'loading') {
       }
     }
     
-    function showFeedback(isCorrect) {
+    function showFeedback(isCorrect, flashType) {
       feedback = isCorrect ? 'correct' : 'wrong';
+      window.warningFlashActive = false;
       
       // Haptic feedback
       if (isCorrect) {
-        vibratePattern([50, 50, 50]); // Double vibration for correct
+        vibratePattern([50, 50, 50]);
       } else {
-        vibrateHeavy(); // Single long vibration for wrong
+        vibrateHeavy();
       }
       
       const userInputs = document.getElementById('userInputs');
       
       // Remove previous states
-      userInputs.classList.remove('correct', 'wrong', 'active');
+      userInputs.classList.remove('correct', 'wrong', 'warning', 'active');
       
       // Remove previous solution text
       const existingSolution = userInputs.querySelector('.solution-text');
@@ -3732,31 +3760,24 @@ if (document.readyState === 'loading') {
       // Flash dartboard outer ring
       const outerRing = document.getElementById('dartboard-outer-ring');
       if (outerRing) {
-        // Remove any existing flash classes
-        outerRing.classList.remove('flash-correct', 'flash-wrong', 'challenge-mode');
-        
-        // Trigger reflow to restart animation
+        outerRing.classList.remove('flash-correct', 'flash-wrong', 'flash-warning', 'challenge-mode');
         void outerRing.offsetWidth;
-        
-        // Add challenge-mode class if in challenge mode
         if (window.challengeMode) {
           outerRing.classList.add('challenge-mode');
         }
-        
-        // Add appropriate flash class - will stay until next generateScore()
-        if (isCorrect) {
+        const type = flashType || (isCorrect ? 'correct' : 'wrong');
+        if (type === 'correct') {
           outerRing.classList.add('flash-correct');
+        } else if (type === 'warning') {
+          outerRing.classList.add('flash-warning');
         } else {
           outerRing.classList.add('flash-wrong');
         }
       }
       
       if (isCorrect) {
-        // Bei richtig: Nur grün färben, kein Text
-        userInputs.classList.remove('active');  // Entferne active
+        userInputs.classList.remove('active');
         userInputs.classList.add('correct');
-        
-        // Automatisch zur nächsten Zahl
         if (window.challengeMode) {
           window.autoNextTimer = setTimeout(() => {
             window.autoNextTimer = null;
@@ -3772,18 +3793,19 @@ if (document.readyState === 'loading') {
             }
           }, 1200);
         }
+      } else if (flashType === 'warning') {
+        // Fehlwurf aber noch checkbar: Orange Box, kein Lösungstext
+        userInputs.classList.remove('active');
+        userInputs.classList.add('warning');
+        updateUserInputs();
       } else {
-        // Bei falsch: Rot färben + Lösung anzeigen
-        userInputs.classList.remove('active');  // Entferne active
+        // Falsch: Rot + Lösung anzeigen
+        userInputs.classList.remove('active');
         userInputs.classList.add('wrong');
-        
-        // Lösung unter den Eingabefeldern anzeigen
         const solutionDiv = document.createElement('div');
         solutionDiv.className = 'solution-text';
         solutionDiv.textContent = `Lösung: ${currentCheckout.join(' → ')}`;
         userInputs.appendChild(solutionDiv);
-        
-        // Restwert aktualisieren - damit er NACH der Lösung erscheint
         updateUserInputs();
       }
     }
@@ -3914,6 +3936,7 @@ if (document.readyState === 'loading') {
           learnBtn.style.borderColor = '#b91c1c';
         }
         window.learnModeActive = false;
+        restoreRealisticModeAfterLearn();
         
         // FORCE: Deaktiviere Realistisch-Modus im Challenge
         window.realisticModeBeforeChallenge = realisticMode;  // Save before overriding
@@ -4078,6 +4101,7 @@ if (document.readyState === 'loading') {
         learnBtn.style.borderColor = '#b91c1c';
       }
       window.learnModeActive = false;
+        restoreRealisticModeAfterLearn();
       
       // Restore realistic mode from localStorage
       const savedRealisticMode = localStorage.getItem('dartTrainerRealisticMode');
@@ -4163,6 +4187,7 @@ if (document.readyState === 'loading') {
         learnBtn.style.borderColor = '#b91c1c';
       }
       window.learnModeActive = false;
+        restoreRealisticModeAfterLearn();
       
       // Update hint range
       currentHintRange = '2-170';
@@ -4210,6 +4235,15 @@ if (document.readyState === 'loading') {
       updateMenuItems();
     }
     
+    function restoreRealisticModeAfterLearn() {
+      if (window.learnModeRealisticModeBefore !== undefined) {
+        realisticMode = window.learnModeRealisticModeBefore;
+        localStorage.setItem('dartTrainerRealisticMode', realisticMode.toString());
+        window.learnModeRealisticModeBefore = undefined;
+        updateMenuItems();
+      }
+    }
+    
     function startLearnMode() {
       const count = Object.keys(problemScores).length;
       if (count === 0) {
@@ -4217,6 +4251,8 @@ if (document.readyState === 'loading') {
       }
       
       // CRITICAL: Deaktiviere Realistisch-Modus im Lernbereich
+      // Vorherigen Status merken, damit er beim Verlassen wiederhergestellt werden kann
+      window.learnModeRealisticModeBefore = realisticMode;
       if (realisticMode) {
         realisticMode = false;
         localStorage.setItem('dartTrainerRealisticMode', 'false');
@@ -4284,6 +4320,7 @@ if (document.readyState === 'loading') {
       if (scores.length === 0) {
         // This shouldn't happen anymore since we handle it in handleDartClick
         window.learnModeActive = false;
+        restoreRealisticModeAfterLearn();
         updateProblemBadge();
         updateMenuItems(); // Re-enable Freies spielen button
         generateScore(currentRangeMin, currentRangeMax);
@@ -4370,7 +4407,7 @@ if (document.readyState === 'loading') {
       // Reset user-inputs
       const userInputsEl = document.getElementById('userInputs');
       userInputsEl.innerHTML = '';
-      userInputsEl.classList.remove('correct', 'wrong', 'active');
+      userInputsEl.classList.remove('correct', 'wrong', 'warning', 'active');
       
       // Remove glow from outer ring when generating new score
       const outerRing = document.getElementById('dartboard-outer-ring');
@@ -5055,6 +5092,7 @@ if (document.readyState === 'loading') {
       if (window.learnModeActive) {
         console.log('Exiting learn mode');
         window.learnModeActive = false;
+        restoreRealisticModeAfterLearn();
         
         // Reset to 3-Dart mode
         currentMode = '3darts';

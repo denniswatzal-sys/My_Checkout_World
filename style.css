@@ -355,6 +355,12 @@
       cursor: pointer;
     }
     
+    .user-inputs.warning {
+      background: #ffedd5;
+      border: 2px solid #f97316;
+      cursor: pointer;
+    }
+    
     .solution-text {
       width: 100%;
       text-align: center;
@@ -1171,20 +1177,17 @@
       justify-content: space-between;
       align-items: center;
       gap: 12px;
-      margin-bottom: -2px;
     }
     
     .tutorial-progress {
       font-size: 13px;
       color: #6b7280;
       font-weight: 600;
-      flex-shrink: 0;
     }
     
     .tutorial-nav-buttons {
       display: flex;
       gap: 8px;
-      flex-shrink: 0;
     }
     
     .tutorial-btn {
@@ -1199,7 +1202,6 @@
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      box-sizing: border-box;
       outline: none;
     }
     
@@ -1448,6 +1450,17 @@
         filter: drop-shadow(0 0 10px rgba(239, 68, 68, 1));
       }
     }
+
+    @keyframes flashWarning {
+      0% { 
+        stroke: white;
+        filter: drop-shadow(0 0 0px rgba(249, 115, 22, 0));
+      }
+      100% { 
+        stroke: #f97316;
+        filter: drop-shadow(0 0 10px rgba(249, 115, 22, 1));
+      }
+    }
     
     #dartboard-outer-ring.flash-correct {
       animation: flashCorrect 1s ease-in-out forwards;
@@ -1460,6 +1473,10 @@
     
     #dartboard-outer-ring.flash-wrong {
       animation: flashWrong 0.3s ease-in-out forwards;
+    }
+
+    #dartboard-outer-ring.flash-warning {
+      animation: flashWarning 0.3s ease-in-out forwards;
     }
     
     /* Countdown Overlay */
