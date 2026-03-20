@@ -1113,12 +1113,13 @@
       position: fixed;
       background: white;
       border-radius: 12px;
-      padding: clamp(12px, 4vw, 20px);
+      padding: 16px;
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-      width: min(320px, calc(100vw - 32px));
-      max-width: min(320px, calc(100vw - 32px));
+      width: 300px;
+      max-width: 300px;
       z-index: 10001;
       border: 3px solid #059669;
+      transform-origin: top left;
     }
     
     .tutorial-tooltip-header {
@@ -1131,7 +1132,7 @@
     }
     
     .tutorial-tooltip-title {
-      font-size: clamp(14px, 4.5vw, 18px);
+      font-size: 16px;
       font-weight: 700;
       color: #065f46;
     }
@@ -1150,6 +1151,7 @@
       align-items: center;
       justify-content: center;
       transition: all 0.2s;
+      flex-shrink: 0;
     }
     
     .tutorial-tooltip-close:hover {
@@ -1161,7 +1163,7 @@
       color: #374151;
       line-height: 1.6;
       margin-bottom: 16px;
-      font-size: clamp(12px, 3.8vw, 15px);
+      font-size: 14px;
     }
     
     .tutorial-tooltip-footer {
@@ -1169,17 +1171,20 @@
       justify-content: space-between;
       align-items: center;
       gap: 12px;
+      margin-bottom: -2px;
     }
     
     .tutorial-progress {
       font-size: 13px;
       color: #6b7280;
       font-weight: 600;
+      flex-shrink: 0;
     }
     
     .tutorial-nav-buttons {
       display: flex;
       gap: 8px;
+      flex-shrink: 0;
     }
     
     .tutorial-btn {
@@ -1194,6 +1199,8 @@
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      box-sizing: border-box;
+      outline: none;
     }
     
     .tutorial-btn-back {

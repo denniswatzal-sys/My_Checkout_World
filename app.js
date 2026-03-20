@@ -1501,72 +1501,90 @@ if (document.readyState === 'loading') {
       backBtn.textContent = '<';
       if (stepIndex === tutorialSteps.length - 1) {
         nextBtn.textContent = '🎯';
+        nextBtn.style.background = 'none';
+        nextBtn.style.border = 'none';
+        nextBtn.style.boxShadow = 'none';
+        nextBtn.style.padding = '0';
+        nextBtn.style.fontSize = '26px';
+        nextBtn.style.maxWidth = 'none';
       } else {
         nextBtn.textContent = '>';
+        nextBtn.style.background = '';
+        nextBtn.style.border = '';
+        nextBtn.style.boxShadow = '';
+        nextBtn.style.padding = '';
+        nextBtn.style.fontSize = '';
+        nextBtn.style.maxWidth = '';
       }
     }
       
     
     function positionTooltip(element, position) {
       const tooltip = document.getElementById('tutorialTooltip');
+      
+      // Tooltip hat feste Breite 300px – auf kleinen Screens proportional skalieren
+      const TOOLTIP_BASE_WIDTH = 300;
+      const margin = 10;
+      const availableWidth = window.innerWidth - margin * 2;
+      const scale = availableWidth < TOOLTIP_BASE_WIDTH ? availableWidth / TOOLTIP_BASE_WIDTH : 1;
+      tooltip.style.transform = `scale(${scale})`;
+      tooltip.style.transformOrigin = 'top left';
+      
       const rect = element.getBoundingClientRect();
+      // Skalierte Dimensionen für Positionsberechnung
       const tooltipRect = tooltip.getBoundingClientRect();
+      const scaledWidth = TOOLTIP_BASE_WIDTH * scale;
+      const scaledHeight = tooltipRect.height;
       
       let top, left;
       
       switch (position) {
         case 'center':
-          // Center the tooltip on the screen
-          top = (window.innerHeight / 2) - (tooltipRect.height / 2);
-          left = (window.innerWidth / 2) - (tooltipRect.width / 2);
+          top = (window.innerHeight / 2) - (scaledHeight / 2);
+          left = (window.innerWidth / 2) - (scaledWidth / 2);
           break;
         case 'bottom':
           top = rect.bottom + 20;
-          left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
+          left = rect.left + (rect.width / 2) - (scaledWidth / 2);
           break;
         case 'bottom-right':
-          // Tooltip below element, arrow points to element from left
           top = rect.bottom + 20;
           left = rect.left - 30 + (rect.width / 2);
           break;
         case 'bottom-left':
-          // Tooltip below element, arrow points to element from right (mirrored to bottom-right)
           top = rect.bottom + 20;
-          left = rect.right - tooltipRect.width + 30 - (rect.width / 2);
+          left = rect.right - scaledWidth + 30 - (rect.width / 2);
           break;
         case 'top':
-          top = rect.top - tooltipRect.height - 20;
-          left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
+          top = rect.top - scaledHeight - 20;
+          left = rect.left + (rect.width / 2) - (scaledWidth / 2);
           break;
         case 'top-right':
-          // Tooltip above element, arrow points to element from right
-          top = rect.top - tooltipRect.height - 20;
-          left = rect.right - tooltipRect.width + 30;
+          top = rect.top - scaledHeight - 20;
+          left = rect.right - scaledWidth + 30;
           break;
         case 'top-left':
-          // Tooltip above element, arrow points to element from left (mirrored to top-right)
-          top = rect.top - tooltipRect.height - 20;
+          top = rect.top - scaledHeight - 20;
           left = rect.left - 30;
           break;
         case 'left':
-          top = rect.top + (rect.height / 2) - (tooltipRect.height / 2);
-          left = rect.left - tooltipRect.width - 20;
+          top = rect.top + (rect.height / 2) - (scaledHeight / 2);
+          left = rect.left - scaledWidth - 20;
           break;
         case 'right':
-          top = rect.top + (rect.height / 2) - (tooltipRect.height / 2);
+          top = rect.top + (rect.height / 2) - (scaledHeight / 2);
           left = rect.right + 20;
           break;
       }
       
-      // Keep tooltip in viewport
-      const margin = 10;
+      // Im Viewport halten
       if (left < margin) left = margin;
-      if (left + tooltipRect.width > window.innerWidth - margin) {
-        left = window.innerWidth - tooltipRect.width - margin;
+      if (left + scaledWidth > window.innerWidth - margin) {
+        left = window.innerWidth - scaledWidth - margin;
       }
       if (top < margin) top = margin;
-      if (top + tooltipRect.height > window.innerHeight - margin) {
-        top = window.innerHeight - tooltipRect.height - margin;
+      if (top + scaledHeight > window.innerHeight - margin) {
+        top = window.innerHeight - scaledHeight - margin;
       }
       
       tooltip.style.top = top + 'px';
@@ -2416,6 +2434,7 @@ if (document.readyState === 'loading') {
       dartsUsedInRound = 0;
       errorStateCheckout = [];
       dartsInErrorState = 0;
+      window.warningFlashActive = false;
       
       if (isStell) {
         scoreCard.classList.add('stell');
